@@ -1,91 +1,472 @@
 /* =============================================================
-   색상 테마는 "여기"에서 바꿉니다. (파랑 계열 기본)
-   원하는 색상 코드로 아래 4가지만 바꿔보세요.
+   색상 테마: 광운대학교 공식 컬러 + 리얼 글래스모피즘(Glassmorphism)
+   - 붉은색 (KW Red): #8A1601
+   - 노란색 (KW Yellow): #F3CF45
+   - 파란색 (KW Blue): #10069F
+   - 하얀색 (KW White): #FFFFFF
    ------------------------------------------------------------- */
 :root {
-  --primary: #1e5bb8;      /* 메인 포인트 색상 */
-  --primary-dark: #194c98; /* 호버/진한 포인트 */
-  --bg: #f7f9fc;           /* 전체 배경 색 */
-  --text: #222222;         /* 본문 글자 색 */
+  --primary: #8A1601;
+  /* 메인: 광운 버건디 레드 */
+  --primary-dark: #5e0e00;
+  /* 진한 버건디 */
+  --accent-yellow: #F3CF45;
+  /* 포인트 1: 광운 옐로우 */
+  --accent-blue: #10069F;
+  /* 포인트 2: 광운 블루 */
+  --bg: #FFFFFF;
+  /* 전체 배경: 광운 화이트 */
+  --text: #221210;
+  /* 본문 글자 색 */
+
+  /* 글래스모피즘 질감 전용 변수 */
+  --glass-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.28) 100%);
+  --glass-red-surface: linear-gradient(135deg, rgba(138, 22, 1, 0.78) 0%, rgba(138, 22, 1, 0.52) 100%);
+  --glass-border-light: rgba(255, 255, 255, 0.9);
+  --glass-border-subtle: rgba(138, 22, 1, 0.18);
+  --glass-blur: blur(24px) saturate(190%);
 }
+
 /* ============================================================= */
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
-  background: var(--bg);
+  background-color: var(--bg);
+  /* 유리판 뒤로 비쳐 보일 선명한 컬러 메쉬 & 보케(Bokeh) 구체들 */
+  background-image:
+    radial-gradient(circle at 18% 18%, rgba(138, 22, 1, 0.32) 0%, rgba(138, 22, 1, 0.08) 28%, transparent 52%),
+    radial-gradient(circle at 82% 22%, rgba(243, 207, 69, 0.55) 0%, rgba(243, 207, 69, 0.15) 25%, transparent 50%),
+    radial-gradient(circle at 75% 78%, rgba(16, 6, 159, 0.26) 0%, rgba(16, 6, 159, 0.06) 28%, transparent 52%),
+    radial-gradient(circle at 22% 80%, rgba(138, 22, 1, 0.25) 0%, transparent 48%),
+    linear-gradient(135deg, #FFFFFF 0%, #fff7f5 50%, #f4f6ff 100%);
+  background-attachment: fixed;
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.7;
+  position: relative;
+  overflow-x: hidden;
 }
 
+/* 유리 카드 바로 뒤에서 굴절감을 만들어주는 플로팅 컬러 오브 (가상 요소 활용) */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(45px);
+}
+
+body::before {
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(138, 22, 1, 0.42) 0%, rgba(243, 207, 69, 0.35) 70%, transparent 100%);
+  top: 8%;
+  left: calc(50% - 460px);
+}
+
+body::after {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(16, 6, 159, 0.32) 0%, rgba(138, 22, 1, 0.28) 65%, transparent 100%);
+  bottom: 6%;
+  right: calc(50% - 460px);
+}
+
+/* 헤더: 루비 버건디 크리스탈 글래스 */
 header {
-  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: 2rem auto 1.2rem;
+  padding: 2.4rem 1.5rem;
   text-align: center;
-  background: var(--primary);
-  color: #ffffff;
+  background: var(--glass-red-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  /* 유리의 입체 테두리: 상단/좌측은 밝은 빛 반사, 하단은 골드 액센트 */
+  border-top: 1.5px solid rgba(255, 255, 255, 0.65);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-right: 1px solid rgba(138, 22, 1, 0.3);
+  border-bottom: 3px solid var(--accent-yellow);
+  border-radius: 24px;
+  box-shadow:
+    0 20px 40px rgba(138, 22, 1, 0.22),
+    inset 0 2px 4px rgba(255, 255, 255, 0.45),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.2);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
 }
-header .subtitle { margin-top: .25rem; opacity: .95; }
 
+/* 헤더 유리 표면 대각선 빛 반사(Glossy Sheen) */
+header::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 65%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  transform: rotate(25deg);
+  pointer-events: none;
+}
+
+header h1 {
+  font-size: 2.1rem;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+}
+
+header .subtitle {
+  margin-top: .45rem;
+  margin-bottom: 0;
+  color: var(--accent-yellow);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* 네비게이션: 플로팅 화이트 프로스티드 글래스 바 */
 nav {
-  background: var(--primary-dark);
+  max-width: 900px;
+  margin: 0 auto 1.5rem;
+  background: var(--glass-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 1.5px solid var(--glass-border-light);
+  border-left: 1.5px solid var(--glass-border-light);
+  border-right: 1px solid var(--glass-border-subtle);
+  border-bottom: 1px solid var(--glass-border-subtle);
+  border-radius: 18px;
   display: flex;
-  gap: 1rem;
-  padding: .75rem 1rem;
+  gap: .8rem;
+  padding: .7rem 1.2rem;
   justify-content: center;
   flex-wrap: wrap;
+  box-shadow:
+    0 12px 28px rgba(138, 22, 1, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9);
 }
-nav a {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 600;
-  padding: .25rem .5rem;
-}
-nav a:hover { text-decoration: underline; }
 
+nav a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+  padding: .5rem 1.25rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 6px rgba(138, 22, 1, 0.05);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+nav a:hover {
+  text-decoration: none;
+  background: var(--glass-red-surface);
+  backdrop-filter: blur(12px);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.5);
+  border-bottom: 2.5px solid var(--accent-yellow);
+  box-shadow:
+    0 8px 20px rgba(138, 22, 1, 0.28),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  transform: translateY(-3px);
+}
+
+/* 메인 컨테이너: 두꺼운 화이트 크리스탈 유리 보드 */
 .container {
   max-width: 900px;
   margin: 1.5rem auto;
-  padding: 1rem;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  padding: 2.4rem;
+  background: var(--glass-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 2px solid #FFFFFF;
+  border-left: 2px solid rgba(255, 255, 255, 0.92);
+  border-right: 1px solid rgba(138, 22, 1, 0.16);
+  border-bottom: 1.5px solid rgba(138, 22, 1, 0.22);
+  border-radius: 26px;
+  box-shadow:
+    0 24px 48px rgba(138, 22, 1, 0.12),
+    0 4px 12px rgba(16, 6, 159, 0.05),
+    inset 0 2px 4px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 3px rgba(138, 22, 1, 0.06);
+  position: relative;
+  overflow: hidden;
 }
 
-section { margin-bottom: 1rem; }
-h1, h2, h3 { margin: .2rem 0 .6rem; }
+/* 메인 컨테이너 상단 유리 하이라이트 반사광 */
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, transparent 100%);
+  pointer-events: none;
+}
 
+section {
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+h1,
+h2,
+h3 {
+  margin: .2rem 0 .8rem;
+}
+
+/* 섹션 제목(h2): 광운 버건디 + 골드/버건디 유리 캡슐 바 */
+h2 {
+  color: var(--primary);
+  font-size: 1.55rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px solid rgba(138, 22, 1, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+h2::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 1.4rem;
+  background: linear-gradient(180deg, var(--primary) 55%, var(--accent-yellow) 100%);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(138, 22, 1, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+/* 소제목(h3): 광운 블루(#10069F) 글래스 포인트 */
+h3 {
+  margin-top: 1.7rem;
+  color: var(--accent-blue);
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+h3::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  box-shadow: 0 0 8px rgba(16, 6, 159, 0.45);
+}
+
+/* 본문 리스트: 겹겹이 쌓인 반투명 유리 타일(Layered Glass Tiles) */
+ul,
+ol {
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: .85rem;
+}
+
+ol {
+  counter-reset: item;
+}
+
+li {
+  padding: 1.05rem 1.3rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.68) 0%, rgba(255, 255, 255, 0.38) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-right: 1px solid rgba(138, 22, 1, 0.14);
+  border-bottom: 1px solid rgba(138, 22, 1, 0.18);
+  border-left: 4px solid var(--primary);
+  border-radius: 14px;
+  box-shadow:
+    0 6px 16px rgba(138, 22, 1, 0.06),
+    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+li:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 248, 225, 0.55) 100%);
+  border-left-color: var(--accent-yellow);
+  border-right-color: rgba(16, 6, 159, 0.25);
+  box-shadow:
+    0 12px 26px rgba(138, 22, 1, 0.14),
+    inset 0 1px 3px #FFFFFF;
+  transform: translateY(-2px) translateX(4px);
+}
+
+/* 포트폴리오 번호 뱃지: 파란색(#10069F) 글래스 뱃지 + 노란색 언더라인 */
+ol li {
+  counter-increment: item;
+  position: relative;
+}
+
+ol li::before {
+  content: "0" counter(item);
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, rgba(16, 6, 159, 0.92), rgba(16, 6, 159, 0.75));
+  backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid var(--accent-yellow);
+  padding: 0.14rem 0.58rem;
+  border-radius: 7px;
+  margin-right: 0.6rem;
+  vertical-align: middle;
+  box-shadow: 0 3px 8px rgba(16, 6, 159, 0.28);
+}
+
+/* 본문 링크: 파란색(#10069F) 반투명 유리 캡슐 버튼 */
+section a {
+  color: var(--accent-blue);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.2rem 0.7rem;
+  border-radius: 8px;
+  background: rgba(16, 6, 159, 0.08);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(16, 6, 159, 0.25);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+}
+
+section a:hover {
+  background: var(--accent-blue);
+  color: #FFFFFF;
+  border-color: var(--accent-yellow);
+  box-shadow: 0 4px 14px rgba(16, 6, 159, 0.35);
+}
+
+strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Contact 폼: 내부에 음각된 글래스 패널 */
 .contact-form {
   display: grid;
   grid-template-columns: 1fr;
-  gap: .5rem;
-  margin-top: 1rem;
+  gap: .8rem;
+  margin-top: 1.6rem;
+  padding: 1.8rem;
+  background: linear-gradient(135deg, rgba(138, 22, 1, 0.06) 0%, rgba(255, 255, 255, 0.45) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.75);
+  border-right: 1px solid rgba(138, 22, 1, 0.16);
+  border-bottom: 1px solid rgba(138, 22, 1, 0.2);
+  border-radius: 18px;
+  box-shadow:
+    0 10px 24px rgba(138, 22, 1, 0.06),
+    inset 0 1px 2px #FFFFFF;
 }
-input, textarea {
+
+.contact-form label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--primary);
+  margin-top: 0.25rem;
+}
+
+input,
+textarea {
   width: 100%;
-  padding: .6rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: .8rem 1rem;
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(138, 22, 1, 0.22);
+  border-left: 1px solid rgba(138, 22, 1, 0.18);
+  border-right: 1px solid rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  color: var(--text);
   font: inherit;
+  box-shadow: inset 0 2px 5px rgba(138, 22, 1, 0.05);
+  transition: all 0.2s ease;
 }
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(34, 18, 16, 0.45);
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--accent-blue);
+  box-shadow:
+    0 0 0 3px rgba(16, 6, 159, 0.16),
+    inset 0 1px 2px #FFFFFF;
+}
+
+/* 버튼: 광운 버건디 글래스 버튼 + 골드 하이라이트 */
 button {
-  padding: .6rem .8rem;
-  border: none;
-  border-radius: 6px;
-  background: var(--primary);
-  color: #fff;
+  margin-top: .5rem;
+  padding: .9rem 1.3rem;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+  border-right: 1px solid rgba(138, 22, 1, 0.4);
+  border-bottom: 3px solid var(--accent-yellow);
+  border-radius: 12px;
+  background: var(--glass-red-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #FFFFFF;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow:
+    0 8px 20px rgba(138, 22, 1, 0.28),
+    inset 0 1px 2px rgba(255, 255, 255, 0.45);
+  transition: all 0.25s ease;
 }
-button:hover { background: var(--primary-dark); }
+
+button:hover {
+  background: linear-gradient(135deg, rgba(163, 27, 2, 0.9), rgba(138, 22, 1, 0.75));
+  box-shadow:
+    0 12px 28px rgba(138, 22, 1, 0.38),
+    inset 0 1px 3px rgba(255, 255, 255, 0.65);
+  transform: translateY(-2px);
+}
 
 footer {
   text-align: center;
-  padding: 2rem 1rem;
-  color: #666;
+  padding: 2.2rem 1rem;
+  color: rgba(138, 22, 1, 0.78);
+  font-weight: 600;
 }
 
 @media (max-width: 600px) {
-  header h1 { font-size: 1.25rem; }
-  .container { margin: 1rem; padding: .75rem; }
+  header {
+    margin: 1rem;
+    padding: 1.6rem 1rem;
+  }
+
+  header h1 {
+    font-size: 1.45rem;
+  }
+
+  nav {
+    margin: 0 1rem 1rem;
+  }
+
+  .container {
+    margin: 1rem;
+    padding: 1.4rem;
+  }
 }
